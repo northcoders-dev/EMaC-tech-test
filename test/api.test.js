@@ -74,4 +74,13 @@ describe('ERROR HANDLING - GET /api/recipes', () => {
 		const { body } = await request.get('/api/badpath').expect(404);
 		expect(body.msg).toEqual('Path not found');
 	});
+	describe('ERROR HANDLING - GET /api/recipes - QUERIES', () => {
+		test('400: return "Invalid ingredient to exclude" error when invalid sort by value is passed', async () => {
+			const { body } = await request
+				.get('/api/recipes?exclude_ingredients=incorrect')
+				.expect(400);
+
+			expect(body.msg).toBe('Invalid ingredient to exclude');
+		});
+	});
 });
