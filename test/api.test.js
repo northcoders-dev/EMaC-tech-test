@@ -26,6 +26,47 @@ describe('GET /api/recipes', () => {
 			});
 		});
 	});
+
+	describe('GET /api/recipes - QUERIES', () => {
+		test('200: Accepts an excludes ingredient query and response with a list if recipe excluding this one item', async () => {
+			const { body } = await request
+				.get('/api/recipes?exclude_ingredients=banana')
+				.expect(200);
+			expect(body.recipes).toBeInstanceOf(Array);
+			body.recipes.forEach((recipe) => {
+				expect(recipe).toMatchObject({
+					id: expect.any(String),
+					imageUrl: expect.any(String),
+					instructions: expect.any(String),
+				});
+				recipe.ingredients.forEach((ingredient) => {
+					expect(ingredient).toMatchObject({
+						name: expect.not.stringContaining('banana'),
+						grams: expect.any(Number),
+					});
+				});
+			});
+		});
+		test('200: Accepts an excludes ingredients query and response with a list if recipe excluding multiple items', async () => {
+			const { body } = await request
+				.get('/api/recipes?exclude_ingredients=banana,cinnamon')
+				.expect(200);
+			expect(body.recipes).toBeInstanceOf(Array);
+			body.recipes.forEach((recipe) => {
+				expect(recipe).toMatchObject({
+					id: expect.any(String),
+					imageUrl: expect.any(String),
+					instructions: expect.any(String),
+				});
+				recipe.ingredients.forEach((ingredient) => {
+					expect(ingredient).toMatchObject({
+						name: expect.not.stringContaining('banana' || 'cinnamon'),
+						grams: expect.any(Number),
+					});
+				});
+			});
+		});
+	});
 });
 
 describe('ERROR HANDLING - GET /api/recipes', () => {
