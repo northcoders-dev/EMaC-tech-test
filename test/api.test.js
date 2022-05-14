@@ -3,13 +3,13 @@ const server = require('../server');
 
 const request = supertest(server);
 
-test.only('/api', async () => {
+test('/api', async () => {
 	const { body } = await request.get('/api').expect(200);
 	expect(body.message).toBe('ok');
 });
 
 describe('GET /api/recipes', () => {
-	test.only('200: responds with an array of recipe objects', async () => {
+	test('200: responds with an array of recipe objects', async () => {
 		const { body } = await request.get('/api/recipes').expect(200);
 		expect(body.recipes).toBeInstanceOf(Array);
 		body.recipes.forEach((recipe) => {
@@ -25,5 +25,12 @@ describe('GET /api/recipes', () => {
 				});
 			});
 		});
+	});
+});
+
+describe('ERROR HANDLING - GET /api/recipes', () => {
+	test('404: return "Path not found" error when invalid URL is passed', async () => {
+		const { body } = await request.get('/api/badpath').expect(404);
+		expect(body.msg).toEqual('Path not found');
 	});
 });
