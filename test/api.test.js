@@ -119,3 +119,53 @@ describe('GET /api/recipes', () => {
     });
   });
 });
+
+describe('POST /api/recipes', () => {
+  describe('HAPPY PATH', () => {
+    describe('201: created', () => {
+      test('/api/recipes', async () => {
+        const postRequest = {
+          imageUrl: 'http://www.images.com/121',
+          instructions: 'spin it, twist it, pull it, flick it... bop it!',
+          ingredients: [
+            { name: 'blueberries', grams: 195 },
+            { name: 'banana', grams: 113 },
+            { name: 'strawberries', grams: 105 },
+            { name: 'cocoa nibs', grams: 18 },
+            { name: 'raspberries', grams: 31 },
+          ],
+        };
+
+        const { body } = await request
+          .post('/api/recipes')
+          .send(postRequest)
+          .expect(201);
+
+        expect(body).toEqual(
+          expect.objectContaining({ id: expect.any(String) })
+        );
+
+        // const expected = {
+        //   id: body.id,
+        //   imageUrl: 'http://www.images.com/121',
+        //   instructions: 'spin it, twist it, pull it, flick it... bop it!',
+        //   ingredients: [
+        //     { name: 'blueberries', grams: 195 },
+        //     { name: 'banana', grams: 113 },
+        //     { name: 'strawberries', grams: 105 },
+        //     { name: 'cocoa nibs', grams: 18 },
+        //     { name: 'raspberries', grams: 31 },
+        //   ],
+        // };
+
+        // console.log(body.id);
+
+        // const { response } = await request
+        //   .get(`/api/recipes/${body.id}`)
+        //   .expect(200);
+        // console.log(response, '<< response');
+        // expect(response.recipe).toEqual(expected);
+      });
+    });
+  });
+});

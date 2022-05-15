@@ -1,4 +1,8 @@
-const { fetchRecipes, fetchRecipeById } = require('../models/recipes.model');
+const {
+  fetchRecipes,
+  fetchRecipeById,
+  createRecipe,
+} = require('../models/recipes.model');
 
 exports.getRecipes = async (req, res, next) => {
   try {
@@ -23,6 +27,18 @@ exports.getRecipeById = async (req, res, next) => {
     const recipe = await fetchRecipeById(id);
 
     res.send({ recipe });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.postRecipe = async (req, res, next) => {
+  try {
+    const { imageUrl, instructions, ingredients } = req.body;
+
+    const id = await createRecipe(imageUrl, instructions, ingredients);
+
+    res.status(201).send({ id });
   } catch (err) {
     next(err);
   }

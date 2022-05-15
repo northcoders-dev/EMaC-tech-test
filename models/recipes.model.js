@@ -36,3 +36,24 @@ exports.fetchRecipeById = async (id) => {
 
   return recipe;
 };
+
+exports.createRecipe = async (imageUrl, instructions, ingredients) => {
+  const data = await fs.readFile('./data/data.json');
+
+  let recipes = JSON.parse(data);
+
+  let newRecipe = {
+    id: `recipe-${recipes.length + 1}`,
+    imageUrl: imageUrl,
+    instructions: instructions,
+    ingredients: ingredients,
+  };
+
+  recipes.push(newRecipe);
+
+  const newData = JSON.stringify(recipes, null, 2);
+
+  await fs.writeFile('./data/data.json', newData, 'utf-8');
+
+  return newRecipe.id;
+};
