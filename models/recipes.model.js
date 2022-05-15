@@ -18,3 +18,15 @@ exports.fetchRecipes = async (excluded) => {
 
   return filteredRecipes;
 };
+
+exports.fetchRecipeById = async (id) => {
+  const data = await fs.readFile('./data/data.json');
+
+  let recipes = JSON.parse(data);
+
+  let recipe = recipes.find((currentRecipe) => {
+    return currentRecipe.id === id;
+  });
+
+  return recipe;
+};
