@@ -110,5 +110,12 @@ describe('GET /api/recipes', () => {
         expect(body).toEqual({ msg: 'not found!' });
       });
     });
+    describe('404: recipe not found', () => {
+      test('/api/recipes/:id', async () => {
+        const id = 'recipe-330';
+        const { body } = await request.get(`/api/recipes/${id}`).expect(404);
+        expect(body).toEqual({ msg: 'not found!' });
+      });
+    });
   });
 });

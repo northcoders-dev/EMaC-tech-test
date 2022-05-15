@@ -28,5 +28,11 @@ exports.fetchRecipeById = async (id) => {
     return currentRecipe.id === id;
   });
 
+  console.log(recipe);
+
+  if (recipe === undefined) {
+    return Promise.reject({ status: 404, msg: 'not found!' });
+  }
+
   return recipe;
 };
