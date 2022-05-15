@@ -81,11 +81,39 @@ describe('GET /api/recipes', () => {
         });
       });
     });
+    describe('200: get a single recipe by id', () => {
+      test('/api/recipes/:id', async () => {
+        const id = 'recipe-31';
+        const { body } = await request.get(`/api/recipes/${id}`).expect(200);
+
+        const expected = {
+          id: 'recipe-31',
+          imageUrl: 'http://www.images.com/21',
+          instructions: 'spin it, twist it, pull it, flick it... bop it!',
+          ingredients: [
+            { name: 'strawberries', grams: 187 },
+            { name: 'kale', grams: 41 },
+            { name: 'apple juice', grams: 64 },
+            { name: 'coffee', grams: 146 },
+            { name: 'cocoa nibs', grams: 154 },
+          ],
+        };
+
+        expect(body.recipe).toEqual(expected);
+      });
+    });
   });
   describe('UNHAPPY PATH', () => {
     describe('404: path not found', () => {
       test('/api/wrongpath', async () => {
         const { body } = await request.get('/api/wrongpath').expect(404);
+        expect(body).toEqual({ msg: 'not found!' });
+      });
+    });
+    describe('404: recipe not found', () => {
+      test('/api/recipes/:id', async () => {
+        const id = 'recipe-330';
+        const { body } = await request.get(`/api/recipes/${id}`).expect(404);
         expect(body).toEqual({ msg: 'not found!' });
       });
     });

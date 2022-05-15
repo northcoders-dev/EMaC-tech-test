@@ -1,4 +1,4 @@
-const { fetchRecipes } = require('../models/recipes.model');
+const { fetchRecipes, fetchRecipeById } = require('../models/recipes.model');
 
 exports.getRecipes = async (req, res, next) => {
   try {
@@ -11,6 +11,18 @@ exports.getRecipes = async (req, res, next) => {
     const recipes = await fetchRecipes(excluded);
 
     res.send({ recipes });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getRecipeById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const recipe = await fetchRecipeById(id);
+
+    res.send({ recipe });
   } catch (err) {
     next(err);
   }

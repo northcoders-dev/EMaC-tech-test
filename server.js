@@ -13,7 +13,8 @@ server.use((req, res, next) => {
 });
 
 server.use((err, req, res, next) => {
-  console.log(err, '<< error');
+  console.log(err, '<< custom error handler');
+  res.status(err.status).send({ msg: err.msg });
 });
 
 module.exports = server;
