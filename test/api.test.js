@@ -23,7 +23,7 @@ describe('GET /api/recipes', () => {
       test('/api/recipes', async () => {
         const { body } = await request.get('/api/recipes');
 
-        body.forEach((recipe) => {
+        body.recipes.forEach((recipe) => {
           expect(recipe).toEqual(
             expect.objectContaining({
               id: expect.any(String),
@@ -39,6 +39,22 @@ describe('GET /api/recipes', () => {
                 grams: expect.any(Number),
               })
             );
+          });
+        });
+      });
+    });
+    describe('200: get recipes excluding certain ingredients', () => {
+      test('/api/recipes?exclude_ingredients=apples,bananas,carrots', async () => {
+        const { body } = await request.get(
+          '/api/recipes?exclude_ingredients=coffee'
+        );
+
+        body.recipes.forEach((recipe) => {
+          recipe.ingredients.forEach((ingredient) => {
+            expect(ingredient).toMatchObject({
+              name: expect.not.stringContaining('coffee'),
+              grams: expect.any(Number),
+            });
           });
         });
       });
