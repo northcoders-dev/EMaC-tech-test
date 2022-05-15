@@ -2,10 +2,13 @@ const { fetchRecipes } = require('../models/recipes.model');
 
 exports.getRecipes = async (req, res, next) => {
   try {
+    let excluded = [];
     const { exclude_ingredients } = req.query;
-    // console.log(req.query, '<< req.query controller');
-    // console.log(exclude_ingredients, '<< ex_ing controller');
-    const recipes = await fetchRecipes(exclude_ingredients);
+    if (exclude_ingredients) {
+      excluded = exclude_ingredients.split(',');
+    }
+
+    const recipes = await fetchRecipes(excluded);
 
     res.send({ recipes });
   } catch (err) {

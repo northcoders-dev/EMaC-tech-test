@@ -43,8 +43,8 @@ describe('GET /api/recipes', () => {
         });
       });
     });
-    describe('200: get recipes excluding certain ingredients', () => {
-      test('/api/recipes?exclude_ingredients=apples,bananas,carrots', async () => {
+    describe('200: get recipes excluding one ingredients', () => {
+      test('/api/recipes?exclude_ingredients=coffee', async () => {
         const { body } = await request.get(
           '/api/recipes?exclude_ingredients=coffee'
         );
@@ -53,6 +53,28 @@ describe('GET /api/recipes', () => {
           recipe.ingredients.forEach((ingredient) => {
             expect(ingredient).toMatchObject({
               name: expect.not.stringContaining('coffee'),
+              grams: expect.any(Number),
+            });
+          });
+        });
+      });
+      test('/api/recipes?exclude_ingredients=apples,bananas,carrots', async () => {
+        const { body } = await request.get(
+          '/api/recipes?exclude_ingredients=apples,bananas,carrots'
+        );
+
+        body.recipes.forEach((recipe) => {
+          recipe.ingredients.forEach((ingredient) => {
+            expect(ingredient).toMatchObject({
+              name: expect.not.stringContaining('apples'),
+              grams: expect.any(Number),
+            });
+            expect(ingredient).toMatchObject({
+              name: expect.not.stringContaining('bananas'),
+              grams: expect.any(Number),
+            });
+            expect(ingredient).toMatchObject({
+              name: expect.not.stringContaining('carrots'),
               grams: expect.any(Number),
             });
           });
