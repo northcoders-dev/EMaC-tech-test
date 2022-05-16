@@ -27,3 +27,16 @@ describe('/api/recipes', () => {
     });
   });
 });
+
+describe('/api/recipes?exclude_ingredients=flax', () => {
+  test('returns 200 and list of recipes without flax', async () => {
+    const { body } = await request.get('/api/recipes').expect(200);
+    const { recipes } = body;
+    expect(recipes).toBeInstanceOf(Array);
+    recipes.forEach((recipe) => {
+      recipes.ingredients.forEach((ingredient) => {
+        expect(ingredient).not.toEqual('flax');
+      });
+    });
+  });
+});
